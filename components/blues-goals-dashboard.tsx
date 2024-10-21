@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { User } from 'lucide-react'
@@ -16,6 +17,7 @@ interface PlayerData {
 interface PersonData {
   name: string
   players: PlayerData[]
+  totalGoals?: number // New property to store total goals
 }
 
 export function BluesGoalsDashboardComponent() {
@@ -61,10 +63,14 @@ export function BluesGoalsDashboardComponent() {
             const { goals, goalLabel } = await fetchPlayerGoals(player.id)
             return { ...player, goals, goalLabel }
           }))
-          return { ...person, players: playersWithGoals }
+          const totalGoals = playersWithGoals.reduce((sum, player) => sum + (player.goals || 0), 0)
+          return { ...person, players: playersWithGoals, totalGoals }
         }))
 
-        setData(dataWithGoals)
+        // Sort the data by total goals, from most to least
+        const sortedData = dataWithGoals.sort((a, b) => (b.totalGoals || 0) - (a.totalGoals || 0))
+
+        setData(sortedData)
         setLoading(false)
       } catch (error) {
         console.error('Error fetching data:', error)
@@ -109,16 +115,18 @@ export function BluesGoalsDashboardComponent() {
               ) : (
                 <>
                   <div className="text-6xl font-bold text-center text-[#003087] mb-4">
-                    {person.players.reduce((sum, player) => sum + (player.goals || 0), 0)}
+                    {person.totalGoals}
                   </div>
                   <div className="grid grid-cols-3 gap-2">
                     {person.players.map((player) => (
                       <div key={player.id} className="text-center">
-                        <img 
-                          src={`/${player.pic}`} 
-                          alt={player.fullName} 
-                          className="w-16 h-16 mx-auto rounded-full object-cover"
-                        />
+                        <div className="w-16 h-16 mx-auto mb-2 relative">
+                          <img 
+                            src={`/${player.pic}`} 
+                            alt={player.fullName} 
+                            className="w-full h-full object-cover rounded-full"
+                          />
+                        </div>
                         <p className="text-sm mt-1">{player.fullName}</p>
                         <p className="text-sm font-bold">{player.goals} {player.goalLabel}</p>
                       </div>
