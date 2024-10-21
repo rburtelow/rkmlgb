@@ -10,6 +10,7 @@ interface PlayerData {
   fullName: string
   pic: string
   goals?: number
+  goalLabel?: string
 }
 
 interface PersonData {
@@ -57,8 +58,8 @@ export function BluesGoalsDashboardComponent() {
 
         const dataWithGoals = await Promise.all(mockData.map(async (person) => {
           const playersWithGoals = await Promise.all(person.players.map(async (player) => {
-            const goals = await fetchPlayerGoals(player.id)
-            return { ...player, goals }
+            const { goals, goalLabel } = await fetchPlayerGoals(player.id)
+            return { ...player, goals, goalLabel }
           }))
           return { ...person, players: playersWithGoals }
         }))
@@ -74,20 +75,17 @@ export function BluesGoalsDashboardComponent() {
     fetchData()
   }, [])
 
-  const fetchPlayerGoals = async (playerId: number): Promise<number> => {
+  const fetchPlayerGoals = async (playerId: number): Promise<{ goals: number, goalLabel: string }> => {
     try {
       const response = await fetch(`/api/player-goals?playerId=${playerId}`)
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
       const data = await response.json()
-      if (data.error) {
-        throw new Error(data.error)
-      }
-      return data.goals
+      return { goals: data.goals, goalLabel: data.goalLabel }
     } catch (error) {
       console.error(`Error fetching goals for player ${playerId}:`, error)
-      return 0
+      return { goals: 0, goalLabel: 'goals' }
     }
   }
 
@@ -122,7 +120,7 @@ export function BluesGoalsDashboardComponent() {
                           className="w-16 h-16 mx-auto rounded-full object-cover"
                         />
                         <p className="text-sm mt-1">{player.fullName}</p>
-                        <p className="text-sm font-bold">{player.goals} goals</p>
+                        <p className="text-sm font-bold">{player.goals} {player.goalLabel}</p>
                       </div>
                     ))}
                   </div>
