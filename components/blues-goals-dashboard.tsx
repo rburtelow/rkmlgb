@@ -28,6 +28,20 @@ export function BluesGoalsDashboardComponent() {
   ])
   const [loading, setLoading] = useState(true)
 
+  const fetchPlayerGoals = async (playerId: number): Promise<{ goals: number, goalLabel: string }> => {
+    try {
+      const response = await fetch(`/api/player-goals?playerId=${playerId}`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const data = await response.json()
+      return { goals: data.goals, goalLabel: data.goalLabel }
+    } catch (error) {
+      console.error(`Error fetching goals for player ${playerId}:`, error)
+      return { goals: 0, goalLabel: 'goals' }
+    }
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,7 +51,8 @@ export function BluesGoalsDashboardComponent() {
             players: [
               { id: 8482089, fullName: 'Jake Neighbors', pic: 'neighbours.png' },
               { id: 8480023, fullName: 'Robert Thomas', pic: 'thomas.jfif' },
-              { id: 8481598, fullName: 'Phillip Broberg', pic: 'broberg.jpg' }
+              { id: 8481598, fullName: 'Phillip Broberg', pic: 'broberg.jpg' },
+              { id: 8475170, fullName: 'Brayden Schenn', pic: 'schenn.png' }
             ]
           },
           {
@@ -81,26 +96,12 @@ export function BluesGoalsDashboardComponent() {
     fetchData()
   }, [])
 
-  const fetchPlayerGoals = async (playerId: number): Promise<{ goals: number, goalLabel: string }> => {
-    try {
-      const response = await fetch(`/api/player-goals?playerId=${playerId}`)
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      const data = await response.json()
-      return { goals: data.goals, goalLabel: data.goalLabel }
-    } catch (error) {
-      console.error(`Error fetching goals for player ${playerId}:`, error)
-      return { goals: 0, goalLabel: 'goals' }
-    }
-  }
-
   return (
     <div className="min-h-screen bg-[#041E42] p-8">
       <h1 className="text-4xl font-bold mb-8 text-center text-[#FCB514]">
         St. Louis Blues Goals Dashboard
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
         {data.map((person, index) => (
           <Card key={index} className="w-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 border-[#0082CA]">
             <CardHeader className="border-b border-[#0082CA] bg-[#003087]">
