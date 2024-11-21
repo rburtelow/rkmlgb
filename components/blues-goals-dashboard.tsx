@@ -152,7 +152,7 @@ export function BluesGoalsDashboardComponent() {
         </CardHeader>
         <CardContent className="pt-6">
           <ul className="list-disc list-inside">
-            <li>11/20/24 - Added Kevin's 2 goals to his total for Schenn while Thomas was on the IR</li>
+            <li>11/20/24 - Added Kevin&apos;s 2 goals to his total for Schenn while Thomas was on the IR</li>
           </ul>
         </CardContent>
       </Card>
