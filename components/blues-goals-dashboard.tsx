@@ -52,7 +52,7 @@ export function BluesGoalsDashboardComponent() {
               { id: 8482089, fullName: 'Jake Neighbors', pic: 'neighbours.png' },
               { id: 8480023, fullName: 'Robert Thomas', pic: 'thomas.jfif' },
               { id: 8481598, fullName: 'Phillip Broberg', pic: 'broberg.jpg' },
-              { id: 8475170, fullName: 'Brayden Schenn', pic: 'schenn.png' }
+              
             ]
           },
           {
@@ -79,7 +79,11 @@ export function BluesGoalsDashboardComponent() {
             return { ...player, goals, goalLabel }
           }))
           const totalGoals = playersWithGoals.reduce((sum, player) => sum + (player.goals || 0), 0)
-          return { ...person, players: playersWithGoals, totalGoals }
+          return { 
+            ...person, 
+            players: playersWithGoals, 
+            totalGoals: person.name === 'Kevin' ? totalGoals + 2 : totalGoals 
+          }
         }))
 
         // Sort the data by total goals, from most to least
@@ -103,8 +107,8 @@ export function BluesGoalsDashboardComponent() {
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
         {data.map((person, index) => (
-          <Card key={index} className="w-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 border-[#0082CA]">
-            <CardHeader className="border-b border-[#0082CA] bg-[#003087]">
+          <Card key={index} className="w-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 border-[#0082CA] rounded-lg">
+            <CardHeader className="border-b border-[#0082CA] bg-[#003087] rounded-t-lg">
               <CardTitle className="text-2xl flex items-center gap-2 text-white">
                 <User className="h-6 w-6 text-[#FCB514]" />
                 {person.name}
@@ -139,6 +143,19 @@ export function BluesGoalsDashboardComponent() {
           </Card>
         ))}
       </div>
+
+      <Card className="w-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 border-[#0082CA] mt-8 rounded-lg">
+        <CardHeader className="border-b border-[#0082CA] bg-[#003087] rounded-t-lg">
+          <CardTitle className="text-xl text-white">
+            Changelog
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <ul className="list-disc list-inside">
+            <li>11/20/24 - Added Kevin's 2 goals to his total for Schenn while Thomas was on the IR</li>
+          </ul>
+        </CardContent>
+      </Card>
     </div>
   )
 }
