@@ -67,7 +67,7 @@ export function BluesGoalsDashboardComponent() {
             name: 'Matt',
             players: [
               { id: 8477402, fullName: 'Pavel Buchnevich', pic: 'buchnevich.png' },
-              { id: 8476438, fullName: 'Brandon Saad', pic: 'saad.png' },
+              { id: 8482737, fullName: 'Zach Bolduc', pic: 'bolduc.jpg' },
               { id: 8476892, fullName: 'Colton Parayko', pic: 'parayko.png' }
             ]
           }
@@ -82,7 +82,8 @@ export function BluesGoalsDashboardComponent() {
           return { 
             ...person, 
             players: playersWithGoals, 
-            totalGoals: person.name === 'Kevin' ? totalGoals + 2 : totalGoals 
+            totalGoals: person.name === 'Kevin' ? totalGoals + 2 : 
+                       person.name === 'Matt' ? totalGoals + 2 : totalGoals 
           }
         }))
 
@@ -152,7 +153,8 @@ export function BluesGoalsDashboardComponent() {
         </CardHeader>
         <CardContent className="pt-6">
           <ul className="list-disc list-inside">
-            <li>11/20/24 - Added Kevin&apos;s 2 goals to his total for Schenn while Thomas was on the IR</li>
+            <li>11/20/24 - Added Kevin&apos;s 2 goals to his total for Schenn while Thomas was on the IR.</li>
+            <li>2/5/25- Added Matt&apos;s 2 goals to his total. Saad had 7 and Bolduc has 5, so a difference of 2.</li>
           </ul>
         </CardContent>
       </Card>
